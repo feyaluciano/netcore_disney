@@ -13,7 +13,7 @@ namespace Core.Entities
         public int IdUsuario { get; set; }
 
         [MaxLength(50), MinLength(4)]
-        public string? Email { get; set; }
+        public string Email { get; set; }
 
        
         public byte[] PasswordHash { get; set; }

@@ -9,21 +9,22 @@ namespace Core.Entities
 {
     public class Personaje
     {
-         [Key]        
-         [Column("IdPersonaje")]
+        [Key]
+        [Column("IdPersonaje")]
         public int IdPersonaje { get; set; }
 
-        // [MaxLength(50), MinLength(1)]
-        // public string? Nombre { get; set; }
+        [MaxLength(50), MinLength(1)]
+        public string Nombre { get; set; }
 
-        // public string? Imagen { get; set; }
+        public string Imagen { get; set; }
 
-        // public int Edad { get; set; }
+        public int Edad { get; set; }
 
-        // public Decimal Peso { get; set; }
+        [Column(TypeName = "decimal(3,2)")]
+        public Decimal Peso { get; set; }
 
-        // public string? Historia { get; set; }
+        public string Historia { get; set; }
 
-        // public ICollection<VideoFilm>? VideosFilm { get; set; }
+        public ICollection<VideoFilm> VideosFilm { get; set; }
     }
 }

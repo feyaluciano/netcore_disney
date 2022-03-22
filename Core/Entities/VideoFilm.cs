@@ -14,14 +14,16 @@ namespace Core.Entities
         public int IdVideoFilm { get; set; }
 
         [MaxLength(50), MinLength(1)]
-        public string? Titulo { get; set; }
+        public string Titulo { get; set; }
 
         public DateTime FechaDeCreacion { get; set; }
 
         [MaxLength(5), MinLength(1)]   
         public int Calificacion { get; set; }
 
-         public ICollection<Personaje>? PersonajesAsociados { get; set; }
+        
+        //ESTO GENERARÁ UNA TABLA
+         public ICollection<Personaje> PersonajesAsociados { get; set; }
 
         
     }

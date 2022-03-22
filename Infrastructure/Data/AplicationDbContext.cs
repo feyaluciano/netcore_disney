@@ -7,26 +7,28 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data
 {
+
+
+
     public class AplicationDbContext : DbContext
     {
         public AplicationDbContext(DbContextOptions options) : base(options)
         {
         }
 
-        
+        public DbSet<Personaje>? Personajes { get; set; }
+        public DbSet<Usuario>? Usuarios { get; set; }
+        public DbSet<VideoFilm>? VideosFilm { get; set; }
+        public DbSet<Genero>? Generos { get; set; }
 
-         //public DbSet<Personaje> Personajes { get; set; }
-
-         protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-            modelBuilder.ApplyConfigurationsFromAssembly(System.Reflection.Assembly.GetExecutingAssembly());
+            modelBuilder.Entity<Personaje>(
+        eb =>
+        {
+            eb.Property(b => b.Peso).HasColumnType("decimal(3, 2)");
+        });            
         }
 
     }
 }
-
-public MySqlContext(DbContextOptions<MySqlContext> options)
-        : base(options)
-    {
-    }

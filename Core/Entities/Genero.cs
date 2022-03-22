@@ -13,8 +13,13 @@ namespace Core.Entities
         public int IdGenero { get; set; }
 
         [MaxLength(50), MinLength(1)]
-        public string? Nombre { get; set; }
+        public string Nombre { get; set; }
 
-        public ICollection<VideoFilm>? VideosFilm { get; set; }
+        public string Imagen { get; set; }
+        
+
+        //ESTO GENERAR UNA CLAVE EN VideoFilm
+        public virtual ICollection<VideoFilm> VideosFilm { get; set; }
+
     }
 }
