@@ -1,3 +1,4 @@
+using APID.Helpers;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,7 +29,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddCors();
 
 
-
+builder.Services.AddAutoMapper(typeof(MappingProfiles));
 
 var app = builder.Build();
 
