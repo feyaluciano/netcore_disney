@@ -13,6 +13,8 @@ namespace Infrastructure.Data
         {
         }
 
+        
+
          //public DbSet<Personaje> Personajes { get; set; }
 
          protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -23,3 +25,8 @@ namespace Infrastructure.Data
 
     }
 }
+
+public MySqlContext(DbContextOptions<MySqlContext> options)
+        : base(options)
+    {
+    }
