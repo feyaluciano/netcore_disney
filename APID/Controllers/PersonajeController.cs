@@ -61,5 +61,94 @@ namespace APID.Controllers
         }
 
 
+
+
+         [HttpPost]
+        [Route("Create")]
+        public async Task<ActionResult<PersonajeDto>> PostPersonaje(PersonajeDto personajeDto)
+        {                       
+            Personaje personaje = _mapper.Map<Personaje>(personajeDto);
+            _context.Personajes.Add(personaje);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {               
+                    _response.IsSuccess = false;
+                    _response.Message = "Error al crear el personaje.";
+                    return NotFound(_response);                    
+               
+            }
+            _response.IsSuccess = true;
+            _response.Message = "El personaje se ha creado con éxito.";
+            _response.Result=_mapper.Map<PersonajeDto>(personaje);                           
+            return Ok(_response);
+        }
+
+         [HttpDelete]
+        [Route("Delete/{id}")]
+        public async Task<ActionResult> DeletePersonaje(int id)
+        {
+            var personaje = await _context.Personajes.FindAsync(id);
+            if (personaje == null)
+            {
+                _response.IsSuccess = false;
+                _response.Message = "El personaje no éxiste.";
+                return NotFound(_response);        
+            }
+            _context.Personajes.Remove(personaje);
+            await _context.SaveChangesAsync();
+            _response.IsSuccess = false;
+            _response.Message = "El personaje se eliminó con éxito.";
+            _response.Result=_mapper.Map<PersonajeDto>(personaje);                            
+            return Ok(_response);
+        }
+
+         [HttpPut]
+        [Route("Update/{id}")]
+        public async Task<IActionResult> PutPersonaje(int id, PersonajeDto personajeDto)
+        {                       
+             Personaje personaje = await _context.Personajes.FindAsync(id);
+
+            if (id != personajeDto.IdPersonaje)
+            {
+                _response.IsSuccess = false;
+                _response.Message = "El personaje no existe";
+                return BadRequest(_response);
+            }           
+            personaje.Nombre = personajeDto.Nombre;            
+            _context.Entry(personaje).State = EntityState.Modified;
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!PersonajeExists(id))
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "El personaje no existe.";
+                    return NotFound(_response);                    
+                }
+                else
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "Error al actualizar el personaje.";
+                    return NotFound(_response);             
+                }
+            }
+            
+            _response.IsSuccess = true;
+            _response.Message = "El personaje se ha modificado con éxito.";
+            _response.Result=_mapper.Map<PersonajeDto>(personaje);                           
+            return Ok(_response);
+        }
+
+         private bool PersonajeExists(int id)
+        {
+            return _context.Personajes.Any(e => e.IdPersonaje == id);
+        }
+
     }
 }
