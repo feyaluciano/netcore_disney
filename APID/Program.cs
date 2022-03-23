@@ -4,14 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
-///  Configuracion para Heroku
-
-var port = Environment.GetEnvironmentVariable("PORT") ?? "3000";
-
-
-     
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -20,7 +13,6 @@ builder.Services.AddDbContext<AplicationDbContext>(options =>
                          ServerVersion.AutoDetect(connectionString)));
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -64,11 +56,6 @@ using(var scope = app.Services.CreateScope())
 //     app.UseSwaggerUI();
 // }
 
-
-app.UseSwagger();
-app.UseSwaggerUI();
-
-app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
 app.UseHttpsRedirection();
 
