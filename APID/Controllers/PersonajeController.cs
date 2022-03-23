@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using APID.Dtos;
 using AutoMapper;
 using Core.Entities;
@@ -63,7 +59,7 @@ namespace APID.Controllers
 
 
 
-         [HttpPost]
+        [HttpPost]
         [Route("Create")]
         public async Task<ActionResult<PersonajeDto>> PostPersonaje(PersonajeDto personajeDto)
         {                       

@@ -1,4 +1,6 @@
+using System.Reflection;
 using APID.Helpers;
+using FluentValidation.AspNetCore;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,6 +24,11 @@ builder.Services.AddCors();
 
 
 builder.Services.AddAutoMapper(typeof(MappingProfiles));
+
+
+
+
+
 
 var app = builder.Build();
 
@@ -49,12 +56,12 @@ using(var scope = app.Services.CreateScope())
 }
 //////////////////////////////////
 
-// Configure the HTTP request pipeline.
-// if (app.Environment.IsDevelopment())
-// {
-//     app.UseSwagger();
-//     app.UseSwaggerUI();
-// }
+//Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 
 app.UseHttpsRedirection();
