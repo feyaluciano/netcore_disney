@@ -58,6 +58,39 @@ namespace APID.Controllers
 
 
 
+         [HttpGet]
+        [Route("characters/search/")]
+        public  async Task<ActionResult<List<PersonajeDto>>> Search([FromQuery]string name, [FromQuery]int age)
+        {
+
+            try
+            {
+                List<Personaje> Personajes = await _context.Personajes.Where(c => c.Nombre.Contains(name) || c.Edad==age)
+                .Include(c => c.VideosFilm)
+                .ToListAsync();
+                if (Personajes == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "No existen Personajes";
+                    return Ok(_response);
+                }
+                _response.IsSuccess = true;
+                _response.Message = "Personajes encontrados con éxito";
+                List<PersonajeDto> PersonajesDto = _mapper.Map<List<Personaje>, List<PersonajeDto>>(Personajes);
+                _response.Result = PersonajesDto;
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = "Error al buscar el Personajes:" + ex.Message;
+                return BadRequest(_response);
+            }
+        }
+
+
+
+
 
         [HttpPost]
         [Route("Create")]

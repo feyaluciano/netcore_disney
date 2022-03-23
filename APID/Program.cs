@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Text.Json.Serialization;
 using APID.Helpers;
 using FluentValidation.AspNetCore;
 using Infrastructure.Data;
@@ -13,6 +14,10 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<AplicationDbContext>(options => 
                          options.UseMySql(connectionString,
                          ServerVersion.AutoDetect(connectionString)));
+
+
+                         builder.Services.AddControllers().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
