@@ -59,8 +59,7 @@ namespace APID.Controllers
 
 
          [HttpGet]
-        [Route("characters/search/")]
-        public  async Task<ActionResult<List<PersonajeDto>>> Search([FromQuery]string name, [FromQuery]int age)
+        [Route("characters/search/")]public  async Task<ActionResult<List<PersonajeDto>>> Search([FromQuery]string name, [FromQuery]int age)
         {
 
             try
