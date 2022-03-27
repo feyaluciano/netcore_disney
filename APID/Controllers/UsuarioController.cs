@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using APID.Dtos;
+using APID.Helpers;
 using AutoMapper;
 using Core.Entities;
 using Infrastructure.Data;
@@ -31,6 +32,66 @@ namespace APID.Controllers
             _response = new ResponseDto();
 
             this._configuration=configuration;
+        }
+
+
+
+
+        [HttpPost]
+        [Route("auth/register")]
+        public async Task<ActionResult<UsuarioDto>> Register(UsuarioDto usuarioDto, string password)
+        {
+            if (!EmailExists(usuarioDto.Email))
+            {
+                try
+                {
+                    Usuario usuario = _mapper.Map<Usuario>(usuarioDto);
+                    HashUtils.CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
+                    usuario.PasswordHash = passwordHash;
+                    usuario.PasswordSalt = passwordSalt;
+                    await _context.Usuarios.AddAsync(usuario);
+                    await _context.SaveChangesAsync();
+                    _response.IsSuccess = true;
+                    _response.Message = "El usuario fue registrado con éxito";
+                    _response.Result = _mapper.Map<UsuarioDto>(usuario);
+                    return Ok(_response);
+
+                }
+                catch (Exception ex)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "Error al crear el usuario:" + ex.Message;
+                    return BadRequest(_response);
+                }
+            }
+            {
+                _response.IsSuccess = false;
+                _response.Message = "El email ya existe";
+                return BadRequest(_response);
+            }
+        }
+
+         [HttpPost]
+        [Route("auth/login")]
+        public async Task<ActionResult<string>> Login(UsuarioLoginDto usuario)
+        {
+            var user = await _context.Usuarios.FirstOrDefaultAsync(x => x.Email.ToLower() == usuario.Email);
+            if (user == null)
+            {
+                _response.IsSuccess = false;
+                _response.Message = "Usuario o contraseña incorrecta";
+                return BadRequest(_response);
+            }
+            if (!HashUtils.VerifyPasswordHash(usuario.Password, user.PasswordHash, user.PasswordSalt))
+            {
+                _response.IsSuccess = false;
+                _response.Message = "Usuario o contraseña incorrecta";
+                return BadRequest(_response);
+            }
+            _response.IsSuccess = true;
+            _response.Result=TokenUtils.GetToken(user,_configuration);
+            _response.Message = "Inicio de sesion éxitoso";
+            return Ok(_response);
         }
 
         [HttpGet]
@@ -94,6 +155,17 @@ namespace APID.Controllers
             _response.Message = "El usuario se ha creado con éxito.";
             _response.Result=_mapper.Map<UsuarioDto>(usuario);                           
             return Ok(_response);
+        }
+
+
+        private bool EmailExists(string email)
+        {
+            return _context.Usuarios.Any(e => e.Email == email);
+        }
+
+        private bool UsuarioExists(int id)
+        {
+            return _context.Usuarios.Any(e => e.IdUsuario == id);
         }
 
 
